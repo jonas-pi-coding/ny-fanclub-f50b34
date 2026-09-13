@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Niklas & Yamur Fan Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* Tokens mirror niklasyagmur.com (site.css): cream ground, priory browns, sage, rose. Single light theme like the wedding site. */
+  :root {
+    --cream: #faf7f2; --parchment: #f3ede2; --paper: #ffffff;
+    --ink: #2b2722; --muted: #6f665c; --hairline: #e2d9c9;
+    --priory-50: #f6f4ef; --priory-100: #e9e3d6; --priory-200: #d6cbb4; --priory-300: #bda988; --priory-400: #a98e64;
+    --priory-700: #634d35; --priory-800: #4c3b2c; --priory-900: #3a2e24;
+    --sage-100: #e7ece4; --sage-300: #aebfa3; --sage-500: #6f8466; --sage-700: #4c5c45;
+    --rose-bg: #fbeceb; --rose-line: #c8695f; --rose-ink: #7e2f26;
+    --heart: #EE2722;
+    --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --radius: 4px;
+    --shadow-sm: 0 1px 2px rgba(43,39,34,.06), 0 1px 3px rgba(43,39,34,.04);
+    --shadow-md: 0 4px 16px rgba(43,39,34,.07), 0 1px 3px rgba(43,39,34,.05);
+    --shadow-lg: 0 12px 40px rgba(43,39,34,.12);
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--cream); color: var(--ink); font-family: var(--sans); font-size: 1.0625rem; line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.12; letter-spacing: -0.005em; color: var(--priory-900); text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  a { color: inherit; }
+  button, input { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--sage-700); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+  .kicker { font-family: var(--sans); font-size: .72rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--sage-700); }
+
+  /* Top bar, like the wedding site's dark hero band */
+  .sign { background: var(--priory-900); color: var(--priory-100); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; }
+  .sign .eyebrow { font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: rgba(246,244,239,.7); }
+  .sign .name { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; color: #fff; line-height: 1.1; margin-top: 2px; }
+  .bullet { width: 36px; height: 36px; border-radius: 50%; background: var(--heart); color: #fff; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; font-family: var(--serif); font-size: 1.15rem; font-weight: 600; }
+
+  main { max-width: 500px; margin: 0 auto; padding: 32px 20px 48px; }
+
+  /* Hero */
+  .hero { display: grid; justify-items: center; text-align: center; gap: 14px; padding: 6px 0 34px; }
+  .badge { width: 196px; height: 196px; border-radius: 50%; background: #fff; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-lg), inset 0 -10px 22px -14px rgba(43,39,34,.35), inset 0 6px 14px -10px rgba(255,255,255,.9); }
+  .badge svg { width: 78%; height: 78%; display: block; }
+  .hero .kicker { margin-top: 6px; }
+  .hero h1 { font-size: clamp(2.4rem, 9vw, 3.1rem); font-weight: 400; }
+  .hero p.lede { color: var(--muted); max-width: 36ch; font-size: 1.05rem; }
+
+  /* Steps: numbered because they are a real sequence */
+  .line { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .stop { position: relative; background: var(--paper); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 20px 20px 22px 20px; box-shadow: var(--shadow-sm); }
+  .stop .bullet { position: static; width: 30px; height: 30px; font-family: var(--sans); font-size: .9rem; font-weight: 600; background: var(--sage-100); color: var(--sage-700); border: 1px solid var(--sage-300); margin-bottom: 10px; }
+  .stop.done .bullet { background: var(--sage-500); border-color: var(--sage-500); color: var(--cream); }
+  .stop.done .bullet::before { content: "✓"; }
+  .stop.done .bullet span { display: none; }
+  .stop.wait { background: transparent; box-shadow: none; border-style: dashed; }
+  .stop.wait .bullet { background: transparent; color: var(--priory-300); border-color: var(--priory-200); }
+  .stop h2 { font-size: 1.55rem; margin-bottom: 4px; }
+  .stop .hint { color: var(--muted); font-size: .95rem; }
+  .stop.wait h2 { color: var(--priory-300); }
+  .stop.wait .hint { color: var(--priory-300); }
+
+  /* Currency choices, styled like the site's .choice cards */
+  .amounts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0 14px; }
+  .amt { display: grid; justify-items: center; gap: 8px; text-decoration: none; padding: 14px 6px 12px; border-radius: var(--radius); background: var(--cream); border: 1px solid var(--priory-200); transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease, transform .12s ease; }
+  .amt:hover { border-color: var(--priory-400); background: #fff; box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+  .amt:active { transform: translateY(1px); }
+  .amt .coin { width: 60px; height: 60px; border-radius: 50%; background: var(--heart); color: #fff; display: grid; place-items: center; font-family: var(--serif); font-size: 1.45rem; font-weight: 600; font-variant-numeric: tabular-nums; box-shadow: inset 0 -5px 0 rgba(0,0,0,.16); }
+  .amt .lbl { font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-weight: 600; }
+  .alt { font-size: .92rem; color: var(--muted); display: grid; gap: 6px; }
+  .alt a { color: var(--priory-800); text-decoration-color: var(--priory-300); text-underline-offset: 3px; }
+  .alt a:hover { color: var(--priory-900); text-decoration-color: var(--priory-800); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; width: 100%; padding: .95rem 1.6rem; border-radius: var(--radius); border: 1px solid transparent; cursor: pointer; font-size: .95rem; font-weight: 500;
+    background: var(--priory-700); color: var(--cream); box-shadow: var(--shadow-sm); transition: background-color .18s ease, box-shadow .18s ease, transform .12s ease, opacity .12s ease; }
+  .btn:hover { background: var(--priory-800); box-shadow: var(--shadow-md); }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: .55; cursor: default; box-shadow: none; }
+  .btn.red { background: var(--priory-900); }
+  .btn.red:hover { background: #2b211a; }
+  .btn .heart { color: #f2b0a8; }
+  .btn.ghost { background: transparent; color: var(--priory-800); border-color: var(--priory-300); box-shadow: none; }
+  .btn.ghost:hover { background: var(--priory-50); border-color: var(--priory-400); }
+  .mt { margin-top: 16px; }
+  .row { display: flex; gap: 10px; align-items: center; }
+  .row .btn { flex: 1; }
+  .link { background: none; border: 0; padding: 8px 0; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-size: .9rem; justify-self: center; }
+  .link:hover { color: var(--priory-900); }
+
+  /* Selfie */
+  .selfie { display: grid; gap: 12px; margin-top: 14px; }
+  .frame { aspect-ratio: 4 / 5; width: 100%; max-width: 240px; margin: 0 auto; border-radius: var(--radius); overflow: hidden; background: var(--cream); border: 1.5px dashed var(--priory-300); display: grid; place-items: center; color: var(--muted); font-size: .9rem; text-align: center; padding: 12px; cursor: pointer; transition: border-color .18s ease, background-color .18s ease; }
+  .frame:hover { border-color: var(--sage-500); background: #fff; }
+  .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .frame.has { border-style: solid; border-color: var(--hairline); padding: 0; }
+
+  /* Vote chips, like the site's .choice */
+  .chips { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .chip { display: flex; align-items: center; gap: 10px; padding: 12px 12px; border-radius: var(--radius); border: 1px solid var(--priory-200); background: var(--cream); cursor: pointer; text-align: left; font-weight: 600; font-size: .9rem; line-height: 1.25; color: var(--priory-900); transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease; }
+  .chip:hover { border-color: var(--priory-400); background: #fff; }
+  .chip .ico { font-size: 1.2rem; line-height: 1; flex: 0 0 auto; }
+  .chip[aria-pressed="true"] { border-color: var(--sage-500); background: var(--sage-100); box-shadow: 0 0 0 1px var(--sage-500); }
+  .field { display: grid; gap: 6px; margin-top: 16px; }
+  .field label { font-size: .875rem; font-weight: 600; color: var(--priory-800); }
+  .field label .opt { font-weight: 400; color: var(--muted); }
+  .field input { padding: .75rem .9rem; border-radius: var(--radius); border: 1px solid var(--priory-200); background: #fff; color: var(--ink); width: 100%; }
+  .field input:focus { outline: none; border-color: var(--sage-500); box-shadow: 0 0 0 1px var(--sage-500); }
+  .err { color: var(--rose-ink); background: var(--rose-bg); border: 1px solid var(--rose-line); border-radius: var(--radius); padding: .6rem .9rem; font-size: .9rem; margin-top: 12px; }
+
+  /* Thanks */
+  .thanks { display: grid; gap: 18px; padding-top: 4px; }
+  .thanks .card { background: linear-gradient(160deg, var(--priory-800), var(--priory-900)); color: var(--priory-50); border-radius: var(--radius); padding: 28px 22px; display: grid; gap: 10px; text-align: center; box-shadow: var(--shadow-lg); }
+  .thanks .card h2 { font-size: 2rem; color: #fff; font-weight: 400; }
+  .thanks .card p { color: rgba(246,244,239,.82); }
+  .thanks .card .bullet { justify-self: center; background: var(--sage-500); }
+  .tally { display: grid; gap: 10px; background: #fff; border: 1px solid var(--hairline); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow-sm); }
+  .tally h3, .wallhead { font-family: var(--sans); font-size: .72rem; text-transform: uppercase; letter-spacing: .18em; color: var(--sage-700); font-weight: 600; margin: 0 0 4px; }
+  .bar { display: grid; grid-template-columns: 1fr auto; gap: 6px 8px; align-items: center; font-size: .92rem; }
+  .bar .track { grid-column: 1 / -1; height: 6px; border-radius: 3px; background: var(--priory-100); overflow: hidden; }
+  .bar .fill { height: 100%; background: var(--sage-500); width: 0; transition: width .5s ease; }
+  .bar .n { font-variant-numeric: tabular-nums; color: var(--muted); }
+  .wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .wall figure { margin: 0; aspect-ratio: 4 / 5; border-radius: var(--radius); overflow: hidden; background: var(--priory-100); position: relative; border: 1px solid var(--hairline); }
+  .wall img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .wall figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 6px 8px; font-size: 11px; color: #fff; background: linear-gradient(transparent, rgba(43,39,34,.7)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Locked */
+  .locked { display: grid; gap: 14px; text-align: center; padding: 48px 0; justify-items: center; }
+  .locked h1 { font-size: 2.2rem; font-weight: 400; }
+  .locked p { color: var(--muted); max-width: 30ch; }
+
+  footer { background: var(--priory-900); color: var(--priory-200); padding: 32px 20px 40px; text-align: center; font-size: .85rem; line-height: 1.6; }
+  footer p { max-width: 44ch; margin: 0 auto; }
+  footer .serif { font-family: var(--serif); font-size: 1.15rem; color: #fff; margin-bottom: 8px; }
+
+  .config-note { border: 1px solid var(--rose-line); background: var(--rose-bg); color: var(--rose-ink); border-radius: var(--radius); padding: 10px 14px; font-size: .9rem; margin-bottom: 20px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="sign" role="banner">
+  <div>
+    <div class="eyebrow">Fan club · est. 19 Sept 2026</div>
+    <div class="name">Niklas &amp; Yamur Fan Club</div>
+  </div>
+  <span class="bullet" aria-hidden="true">♥</span>
+</header>
+
+<main id="app">
+
+  <section class="locked" id="locked" hidden>
+    <span class="bullet" aria-hidden="true" style="width:56px;height:56px;font-size:1.6rem">♥</span>
+    <h1>Members only.</h1>
+    <p>Scan the QR code at the button table to get in.</p>
+  </section>
+
+  <div id="content" hidden>
+
+    <div class="config-note" id="cfgnote" hidden>Setup mode: payment links or backend not configured yet. Fill in <code>CFG</code> at the bottom of index.html.</div>
+
+    <section class="hero">
+      <div class="badge" aria-label="I love NY button">
+        <svg xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" viewBox="-6.7884 -87.2134 96.9767 96.9767">
+
+<g transform="scale(83.36971,-77.42294)">
+<path fill="#EE2722" d="M 0.5349,0.9997 C 0.5558,1.0012 0.5747,0.9968 0.5936,0.9852 0.5961,0.9837 0.6041,0.9785 0.6062,0.9765 0.6087,0.974 0.6261,0.9593 0.6295,0.9545 0.6312,0.9522 0.6478,0.9306 0.6478,0.9306 c 0,0 0.0158,0.0181 0.0186,0.0212 C 0.6712,0.9569 0.6757,0.9602 0.6792,0.963 0.6894,0.9713 0.6998,0.9787 0.7115,0.9859 0.7197,0.991 0.7338,0.9957 0.7413,0.9968 0.7434,0.9971 0.749,0.9979 0.7515,0.9983 0.78,1.0027 0.8169,0.9903 0.8378,0.9773 0.8609,0.963 0.8768,0.9419 0.8891,0.9155 0.8918,0.9096 0.898,0.8939 0.8992,0.89 0.9057,0.8691 0.9072,0.8427 0.9053,0.8166 0.9024,0.776 0.8862,0.7343 0.8689,0.7091 0.8654,0.7041 0.8574,0.6895 0.8477,0.6769 0.8154,0.6353 0.7676,0.5835 0.7195,0.5507 0.706,0.5415 0.6543,0.511 0.6543,0.511 c 0,0 -0.0539,0.0324 -0.0625,0.0381 C 0.5373,0.5855 0.4771,0.6371 0.4435,0.6954 0.4318,0.7157 0.4183,0.7362 0.4106,0.761 0.407,0.7724 0.4038,0.7822 0.4013,0.7949 0.3954,0.8248 0.3972,0.86 0.4051,0.8879 0.4086,0.9003 0.4138,0.9136 0.4188,0.9242 0.4369,0.9621 0.4705,0.987 0.5147,0.9967 c 0.007,0.0015 0.0137,0.0026 0.0202,0.003"/>
+<path fill="#000000" d="M 0.3091,0.9988 C 0.3115,0.999 0.314,0.9977 0.3157,0.9974 0.3284,0.9949 0.3337,0.9912 0.3387,0.9803 0.3495,0.957 0.3357,0.9359 0.317,0.9315 0.2972,0.9269 0.271,0.938 0.2611,0.9217 0.2546,0.911 0.2583,0.8777 0.2584,0.8631 0.2585,0.8452 0.2582,0.828 0.2592,0.8101 0.2597,0.8019 0.2587,0.7926 0.2597,0.7847 0.2604,0.7787 0.259,0.7724 0.2595,0.7671 0.2609,0.7539 0.2612,0.7387 0.2608,0.7242 0.2602,0.7047 0.2612,0.687 0.261,0.6684 0.2608,0.6563 0.2596,0.6438 0.2611,0.6316 0.262,0.6251 0.2634,0.6174 0.2663,0.6129 0.2808,0.591 0.3255,0.6173 0.3408,0.5917 0.3419,0.5898 0.3432,0.588 0.3439,0.5857 0.3442,0.5845 0.3444,0.5835 0.3447,0.5821 0.348,0.567 0.3428,0.5536 0.3342,0.5475 0.333,0.5467 0.3311,0.5455 0.33,0.5451 0.3209,0.5416 0.3062,0.5417 0.2943,0.5428 0.2778,0.5444 0.2625,0.5427 0.2471,0.5441 0.2324,0.5453 0.2145,0.5458 0.1986,0.5441 0.1847,0.5425 0.1686,0.5423 0.1548,0.5414 0.1482,0.541 0.1422,0.5392 0.135,0.5406 0.1257,0.5423 0.1176,0.5473 0.1136,0.5549 0.1061,0.5692 0.1085,0.5902 0.1198,0.5985 0.1229,0.6007 0.1269,0.6015 0.131,0.6028 0.1525,0.61 0.1804,0.5956 0.1918,0.6159 c 0.0073,0.0129 0.0018,0.046 0.0031,0.0642 0.0011,0.0161 -10e-5,0.0358 -5e-4,0.0509 -6e-4,0.0231 -8e-4,0.0793 -8e-4,0.0793 -8e-4,0.0238 8e-4,0.0482 -8e-4,0.0713 -6e-4,0.0093 0.0011,0.0176 0,0.0269 -6e-4,0.005 -0.0018,0.01 -0.0039,0.0136 C 0.1802,0.937 0.1484,0.9277 0.1311,0.9301 0.1227,0.9312 0.1165,0.9363 0.1115,0.9413 0.1051,0.9476 0.1013,0.9626 0.105,0.9747 c 0.0011,0.0034 0.002,0.0062 0.0038,0.0087 0.0045,0.0068 0.0119,0.0113 0.0213,0.0128 0.0068,0.001 0.0137,3e-4 0.0201,0 0.0164,-9e-4 0.0329,-6e-4 0.0488,-0.0014 0.037,-0.002 0.0739,8e-4 0.1101,0.004"/>
+<path fill="#000000" d="M 0.688,0.4633 C 0.6972,0.4643 0.7096,0.463 0.7162,0.4592 0.7242,0.4544 0.7278,0.4461 0.7298,0.4347 0.7331,0.4157 0.7213,0.4021 0.7082,0.3981 0.7036,0.3967 0.6969,0.3969 0.6927,0.3962 0.6867,0.3952 0.679,0.3993 0.6729,0.3957 0.6728,0.3956 0.6705,0.3931 0.6703,0.392 0.6697,0.3894 0.6699,0.3855 0.6721,0.3821 0.6726,0.3814 0.6854,0.3593 0.6904,0.3498 0.7084,0.3162 0.7265,0.2828 0.7439,0.249 0.7462,0.2445 0.7475,0.2438 0.7475,0.2438 c 0,0 0.008,0.0119 0.0091,0.014 0.0117,0.0218 0.0237,0.0435 0.0357,0.0655 0.005,0.0092 0.0106,0.0182 0.0147,0.0283 9e-4,0.0022 0.0147,0.0284 0.0156,0.0291 0.0011,0.001 0.0018,0.0032 0.0025,0.0048 0.003,0.0066 4e-4,0.0098 -0.0056,0.0109 C 0.8146,0.3973 0.8085,0.396 0.8046,0.3953 0.7998,0.3946 0.7922,0.3962 0.7874,0.3969 0.7693,0.3996 0.7572,0.4194 0.7636,0.4407 0.766,0.4487 0.7728,0.457 0.7805,0.4592 c 0.0182,0.0052 0.0396,-7e-4 0.0592,-4e-4 0.0232,4e-4 0.0488,10e-5 0.0701,2e-4 0.0223,10e-5 0.0422,0.0052 0.065,0.0024 C 0.9836,0.4603 0.9912,0.4549 0.9953,0.4485 0.9989,0.443 1.0005,0.4347 0.9999,0.4258 0.9995,0.4201 0.9939,0.4075 0.9934,0.4068 0.978,0.3861 0.9471,0.4 0.9226,0.3931 c 0,0 -0.0037,-4e-4 -0.0056,-9e-4 C 0.9137,0.3915 0.9081,0.3888 0.9055,0.3868 0.8918,0.3764 0.8821,0.3531 0.8732,0.3371 0.8527,0.2998 0.8298,0.2637 0.8099,0.2259 0.8051,0.2167 0.7914,0.1943 0.7903,0.1922 0.788,0.1878 0.7843,0.1837 0.7827,0.1786 0.7802,0.1707 0.7818,0.1565 0.7816,0.1469 0.7813,0.1286 0.7791,0.111 0.7814,0.0932 0.7821,0.0879 0.7848,0.0818 0.7876,0.0785 0.797,0.0676 0.8203,0.0744 0.8345,0.0743 0.8449,0.0743 0.854,0.0709 0.8601,0.066 0.8747,0.0542 0.8709,0.0306 0.8603,0.018 0.8568,0.0138 0.8514,0.011 0.8467,0.0095 0.8383,0.0088 0.8267,0.008 0.8219,0.0084 0.7912,0.0115 0.7577,0.0139 0.7265,0.0114 0.7187,0.0108 0.7108,0.0122 0.7024,0.011 0.6896,0.0093 0.6691,0.0065 0.655,0.0084 0.6493,0.0092 0.6432,0.0126 0.6396,0.0159 0.6383,0.017 0.6376,0.0186 0.6362,0.0196 0.6329,0.0218 0.6313,0.0271 0.6299,0.0313 0.6208,0.0571 0.6424,0.0759 0.6665,0.0726 0.681,0.0706 0.6981,0.071 0.7066,0.0796 c 0.0086,0.0087 0.0063,0.0242 0.0075,0.0406 9e-4,0.0133 -10e-5,0.0276 8e-4,0.0403 3e-4,0.0048 0.0011,0.0101 0,0.0146 C 0.7138,0.1797 0.7106,0.1829 0.7087,0.1866 0.7018,0.2001 0.6927,0.2123 0.6859,0.2255 0.6734,0.2496 0.6595,0.2722 0.646,0.2953 0.639,0.3073 0.6332,0.3207 0.6252,0.332 0.6169,0.3437 0.6102,0.3575 0.6027,0.3702 0.6005,0.3738 0.5984,0.3764 0.5954,0.3809 0.5927,0.384 0.5888,0.3861 0.5858,0.3882 0.5814,0.3913 0.5757,0.3951 0.5699,0.3964 0.5443,0.4022 0.5109,0.3884 0.4977,0.4103 0.4894,0.4241 0.4918,0.4477 0.5031,0.4565 0.5079,0.4603 0.5148,0.4615 0.5215,0.4626 0.5356,0.465 0.5505,0.4607 0.5643,0.4614 0.606,0.4637 0.6475,0.4589 0.688,0.4633"/>
+<path fill="#000000" d="m 0.0395,0.4668 c 0.0026,3e-4 0.0042,-9e-4 0.0063,-8e-4 C 0.06,0.4661 0.0746,0.4657 0.088,0.4653 0.1108,0.4645 0.1587,0.4702 0.1755,0.4597 0.1993,0.4449 0.2064,0.4166 0.2181,0.3887 0.2235,0.3757 0.2293,0.3627 0.2344,0.3488 0.2429,0.3256 0.2549,0.3034 0.2618,0.2789 0.2639,0.2714 0.2688,0.263 0.2718,0.2557 0.2798,0.2362 0.2868,0.2171 0.2943,0.1976 0.2981,0.188 0.3034,0.1778 0.3068,0.1681 0.3097,0.1598 0.3317,0.1082 0.3317,0.1082 c 0,0 -3e-4,0.0157 -5e-4,0.0204 -4e-4,0.0149 3e-4,0.0271 0.0014,0.0418 9e-4,0.0137 2e-4,0.0271 10e-5,0.0403 -10e-5,0.0122 0.0011,0.0251 5e-4,0.0368 -5e-4,0.0099 -0.0012,0.0237 -3e-4,0.0336 0.0015,0.0172 4e-4,0.0635 3e-4,0.0642 -7e-4,0.0095 5e-4,0.0204 -3e-4,0.03 C 0.3324,0.3804 0.3307,0.3864 0.3282,0.3901 0.3186,0.4042 0.2972,0.397 0.2791,0.3985 0.2677,0.3994 0.26,0.4036 0.253,0.4091 0.2498,0.4117 0.2461,0.4155 0.2451,0.4203 0.238,0.4549 0.2625,0.4674 0.2935,0.4649 c 0.0061,-5e-4 0.0113,6e-4 0.0169,-7e-4 7e-4,-2e-4 0.0022,-7e-4 0.0022,-7e-4 0.0061,0.001 0.0139,-8e-4 0.0198,-0.0016 0.0114,-0.0015 0.0241,2e-4 0.0351,-0.001 0.0038,-4e-4 0.0104,4e-4 0.0148,0.0012 0.0019,4e-4 0.0196,-6e-4 0.0265,2e-4 C 0.4259,0.4642 0.4436,0.4673 0.461,0.4642 0.471,0.4624 0.48,0.4548 0.4835,0.4459 0.4914,0.4253 0.4835,0.4115 0.4715,0.4021 0.4549,0.3893 0.419,0.4041 0.404,0.3901 0.4018,0.3881 0.3998,0.3839 0.3988,0.3809 0.397,0.3753 0.3981,0.3655 0.3985,0.3601 0.3992,0.3493 0.3974,0.3386 0.398,0.3261 c 2e-4,-0.0045 -6e-4,-0.035 0,-0.043 0.0011,-0.0159 -0.0011,-0.0313 0,-0.0473 7e-4,-0.0116 0,-0.0274 -8e-4,-0.0392 C 0.3965,0.1868 0.3982,0.179 0.3975,0.1688 0.396,0.1473 0.3974,0.125 0.3967,0.1047 0.3961,0.0882 0.3999,0.0594 0.3951,0.0457 0.3942,0.0432 0.3939,0.0408 0.3933,0.0382 0.3905,0.026 0.3832,0.0171 0.3751,0.0103 0.3635,6e-4 0.3426,-0.0029 0.324,0.0027 0.3101,0.0068 0.2983,0.0179 0.2919,0.0302 0.2772,0.0582 0.265,0.0934 0.2537,0.1244 0.2436,0.152 0.231,0.1786 0.2212,0.2067 0.219,0.2127 0.2153,0.219 0.2132,0.2248 0.2075,0.241 0.2009,0.256 0.1948,0.2715 0.1887,0.2868 0.1837,0.302 0.1773,0.3165 0.1738,0.3244 0.1584,0.3698 0.1541,0.3714 0.1511,0.3605 0.1546,0.3461 0.1539,0.3355 0.1527,0.3145 0.1538,0.2888 0.1535,0.2681 0.1527,0.227 0.1519,0.1912 0.1535,0.1497 0.1542,0.1291 0.1488,0.1008 0.157,0.0855 0.1574,0.0848 0.1575,0.084 0.158,0.0834 0.1769,0.0608 0.2185,0.0912 0.236,0.0571 0.2446,0.0404 0.2359,0.0191 0.2236,0.0133 0.2172,0.0103 0.2076,0.0092 0.1996,0.01 0.1956,0.0104 0.19,0.0089 0.186,0.0096 0.1796,0.0109 0.1731,0.0099 0.1658,0.011 0.1527,0.0131 0.1398,0.0133 0.1255,0.0131 0.1119,0.013 0.1006,0.0129 0.0872,0.0128 0.0824,0.0127 0.0774,0.0113 0.0727,0.0119 0.0515,0.0145 0.0198,0.0019 0.0074,0.0199 0.0022,0.0275 -0.0027,0.041 0.0017,0.0529 0.004,0.059 0.0055,0.0638 0.0097,0.0677 0.015,0.0727 0.0234,0.0751 0.0322,0.0763 0.038,0.077 0.043,0.0748 0.0482,0.0743 0.0633,0.0731 0.0799,0.0771 0.0846,0.0879 c 0.002,0.0046 0.0013,0.0093 0.0022,0.0157 0.0018,0.0149 -5e-4,0.0305 6e-4,0.0457 3e-4,0.0041 -4e-4,0.0172 -4e-4,0.0208 1e-4,0.0215 0.001,0.0323 2e-4,0.043 -0.0017,0.0248 0.0019,0.0483 5e-4,0.0722 -5e-4,0.0087 4e-4,0.0169 -1e-4,0.0251 -2e-4,0.0019 0,0.0059 0,0.0059 0,0.0165 0.0015,0.0337 -2e-4,0.0501 -8e-4,0.0078 5e-4,0.0152 -0.0013,0.022 C 0.0792,0.4138 0.022,0.3861 0.0103,0.4114 0.008,0.4164 0.0043,0.421 0.003,0.4276 -7e-4,0.4474 0.0133,0.4608 0.0259,0.4651 0.0304,0.4666 0.0353,0.4664 0.0395,0.4668"/>
+</g>
+</svg>
+      </div>
+      <p class="kicker">Grab a button · wear it loud</p>
+      <h1>Show your love.</h1>
+      <p class="lede">Every donation goes straight into Niklas &amp; Yamur's New York trip. Suggested €8, £7 or $9. Takes 30 seconds.</p>
+    </section>
+
+    <ol class="line" id="line">
+
+      <li class="stop" id="stop1">
+        <span class="bullet" aria-hidden="true"><span>1</span></span>
+        <h2>Chip in</h2>
+        <p class="hint" id="payHint">Suggested amounts. Opens the PayPal pool, pay by card or PayPal, no account needed.</p>
+        <div class="amounts" id="amounts">
+          <a class="amt" data-cur="EUR" href="#" target="_blank" rel="noopener"><span class="coin">€8</span><span class="lbl">Euro</span></a>
+          <a class="amt" data-cur="GBP" href="#" target="_blank" rel="noopener"><span class="coin">£7</span><span class="lbl">Pounds</span></a>
+          <a class="amt" data-cur="USD" href="#" target="_blank" rel="noopener"><span class="coin">$9</span><span class="lbl">Dollars</span></a>
+        </div>
+        <div class="alt" id="alt">
+          <span id="poolLine" hidden>No PayPal account? <a id="poolLink" href="#" target="_blank" rel="noopener">Pay by card via the PayPal pool</a>.</span>
+          <span id="meLine" hidden>Prefer PayPal.Me? Send <span id="meLinks"></span> directly.</span>
+          <span id="wiseLine" hidden>Wise user? <a id="wiseLink" href="#" target="_blank" rel="noopener">Send via Wise</a>.</span>
+        </div>
+        <button class="btn red mt" id="doneBtn" type="button">Done, I chipped in <span class="heart" aria-hidden="true">♥</span></button>
+      </li>
+
+      <li class="stop wait" id="stop2">
+        <span class="bullet" aria-hidden="true"><span>2</span></span>
+        <h2>Selfie with your button</h2>
+        <p class="hint">Optional, goes on the fan wall.</p>
+        <div class="selfie" id="selfieBox" hidden>
+          <label class="frame" id="frame" for="file">Tap to open the camera</label>
+          <input id="file" type="file" accept="image/*" capture="user" hidden>
+          <div class="row">
+            <button class="btn ghost" id="retake" type="button" hidden>Retake</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="stop wait" id="stop3">
+        <span class="bullet" aria-hidden="true"><span>3</span></span>
+        <h2>What should they blow it on?</h2>
+        <p class="hint">One vote. The couple sees the results.</p>
+        <div id="voteBox" hidden>
+          <div class="chips" id="chips" role="group" aria-label="Vote"></div>
+          <div class="field">
+            <label for="name">Your name <span class="opt">(optional)</span></label>
+            <input id="name" type="text" maxlength="60" autocomplete="name" placeholder="So they know who to thank">
+          </div>
+          <button class="btn mt" id="sendBtn" type="button" disabled>Send my vote</button>
+          <p class="err" id="err" hidden></p>
+        </div>
+      </li>
+    </ol>
+
+    <section class="thanks" id="thanks" hidden>
+      <div class="card">
+        <span class="bullet" aria-hidden="true">✓</span>
+        <h2>You're in the fan club.</h2>
+        <p id="thanksText">Thank you. Wear the button, spread the love.</p>
+      </div>
+      <div class="tally" id="tally" hidden>
+        <h3>Fan club vote so far</h3>
+        <div id="bars"></div>
+      </div>
+      <div id="wallBox" hidden>
+        <h3 class="wallhead">Fan wall</h3>
+        <div class="wall" id="wall"></div>
+      </div>
+      <button class="link" id="again" type="button">Someone else wants to join? Start over</button>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <p class="serif">Niklas &amp; Yamur · New York, someday soon</p>
+  <p>The I ♥ NY buttons are a gift from Jonas. 100% of donations are handed to Niklas &amp; Yamur for their New York trip. Selfies are shared only with the couple and the fan wall on this page.</p>
+</footer>
+
+<script>
+/* ---------- Configuration ---------- */
+const CFG = {
+  // PayPal.Me handle without the URL, e.g. "jonaswarmuth". Leave "" to hide the currency buttons' links.
+  paypalMe: "",
+  // Optional PayPal Pool URL for card payments without a PayPal account.
+  poolUrl: "https://www.paypal.com/pool/9sDhwfxFQu",
+  // Optional Wise payment request link(s): one URL, or one per currency { EUR: "", GBP: "", USD: "" }.
+  wiseUrl: "",
+  // Google Apps Script web app URL (ends with /exec). "" = votes stay on this phone only.
+  backend: "",
+  // SHA-256 hex of the secret key that lives in the QR URL as ?k=... . "" = no gate (setup mode).
+  keyHash: "7737f55bded2a6461488a66b79a09583d52ef1410141f21317d2d2c7cf4d35a0",
+  amounts: { EUR: 8, GBP: 7, USD: 9 },
+};
+
+const VOTES = [
+  { id: "stay",     ico: "🏙️", label: "A fancy place to stay" },
+  { id: "rooftop",  ico: "🍸", label: "Rooftop drinks" },
+  { id: "food",     ico: "🍕", label: "Eat everything" },
+  { id: "thrift",   ico: "🧥", label: "Vintage shopping haul" },
+  { id: "designer", ico: "👜", label: "One designer piece" },
+  { id: "museum",   ico: "🖼️", label: "Museum day" },
+  { id: "show",     ico: "🎟️", label: "Broadway or a concert" },
+  { id: "club",     ico: "🪩", label: "A proper club night" },
+];
+
+/* ---------- State ---------- */
+const $ = (id) => document.getElementById(id);
+let key = "";
+let selfieDataUrl = null;
+let vote = null;
+
+function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+async function sha256(s) {
+  if (!(crypto && crypto.subtle)) return null;
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+/* ---------- Gate ---------- */
+async function gate() {
+  const params = new URLSearchParams(location.search);
+  key = params.get("k") || (function () { try { return sessionStorage.getItem("fanclub_k") || ""; } catch (e) { return ""; } })();
+  if (!CFG.keyHash) { $("cfgnote").hidden = !!((CFG.poolUrl || CFG.paypalMe) && CFG.backend); return true; }
+  const h = key ? await sha256(key) : null;
+  const ok = h === CFG.keyHash;
+  if (ok) { try { sessionStorage.setItem("fanclub_k", key); } catch (e) {} }
+  return ok;
+}
+
+/* ---------- Render ---------- */
+function setupPayments() {
+  const coins = document.querySelectorAll(".amt");
+  if (CFG.poolUrl) {
+    // Pool is the primary path: works by card without a PayPal account.
+    coins.forEach(a => { a.href = CFG.poolUrl; });
+    if (CFG.paypalMe) {
+      $("meLinks").innerHTML = Object.entries(CFG.amounts).map(([cur, amt]) =>
+        `<a href="https://paypal.me/${CFG.paypalMe}/${amt}${cur}" target="_blank" rel="noopener">${amt} ${cur}</a>`).join(" · ");
+      $("meLine").hidden = false;
+    }
+  } else if (CFG.paypalMe) {
+    $("payHint").textContent = "Pick your currency. Opens PayPal, any amount works.";
+    coins.forEach(a => { a.href = `https://paypal.me/${CFG.paypalMe}/${CFG.amounts[a.dataset.cur]}${a.dataset.cur}`; });
+  } else {
+    coins.forEach(a => { a.href = "#"; a.addEventListener("click", e => { e.preventDefault(); alert("Payment link not configured yet."); }); });
+  }
+  if (CFG.wiseUrl) {
+    const line = $("wiseLine");
+    if (typeof CFG.wiseUrl === "string") { $("wiseLink").href = CFG.wiseUrl; }
+    else {
+      const parts = Object.entries(CFG.wiseUrl).filter(([, u]) => u).map(([cur, u]) => `<a href="${u}" target="_blank" rel="noopener">${cur}</a>`);
+      if (!parts.length) return;
+      line.innerHTML = "Wise user? Send via Wise in " + parts.join(", ") + ".";
+    }
+    line.hidden = false;
+  }
+}
+
+function setupChips() {
+  const box = $("chips");
+  VOTES.forEach(v => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "chip"; b.dataset.id = v.id; b.setAttribute("aria-pressed", "false");
+    b.innerHTML = `<span class="ico" aria-hidden="true">${v.ico}</span><span>${v.label}</span>`;
+    b.addEventListener("click", () => {
+      vote = v.id;
+      box.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c === b)));
+      $("sendBtn").disabled = false;
+    });
+    box.appendChild(b);
+  });
+}
+
+function openSteps() {
+  $("stop1").classList.add("done");
+  $("doneBtn").hidden = true;
+  ["stop2", "stop3"].forEach(id => $(id).classList.remove("wait"));
+  $("selfieBox").hidden = false;
+  $("voteBox").hidden = false;
+  $("stop2").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/* ---------- Selfie: compress client-side ---------- */
+function compressImage(file, maxSide = 720, quality = 0.8) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+      const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
+      const c = document.createElement("canvas"); c.width = w; c.height = h;
+      c.getContext("2d").drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      resolve(c.toDataURL("image/jpeg", quality));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("bad image")); };
+    img.src = url;
+  });
+}
+
+$("file").addEventListener("change", async (e) => {
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  try {
+    selfieDataUrl = await compressImage(f);
+    if (selfieDataUrl.length > 400000) selfieDataUrl = await compressImage(f, 560, 0.7);
+    const fr = $("frame"); fr.classList.add("has"); fr.innerHTML = `<img alt="Your selfie" src="${selfieDataUrl}">`;
+    $("retake").hidden = false;
+    $("stop2").classList.add("done");
+  } catch (err) {
+    $("err").textContent = "That photo did not load. Try another one."; $("err").hidden = false;
+  }
+});
+$("retake").addEventListener("click", () => { $("file").value = ""; $("file").click(); });
+
+/* ---------- Submit ---------- */
+async function submit() {
+  const btn = $("sendBtn"); btn.disabled = true; btn.textContent = "Sending…"; $("err").hidden = true;
+  const payload = { k: key, name: ($("name").value || "").trim().slice(0, 60), vote, selfie: selfieDataUrl, ua: navigator.userAgent.slice(0, 120) };
+  let ok = false;
+  if (CFG.backend) {
+    try {
+      const r = await fetch(CFG.backend, { method: "POST", body: JSON.stringify(payload), headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow" });
+      const j = await r.json(); ok = !!j.ok;
+      if (!ok) throw new Error(j.error || "server");
+    } catch (e) {
+      btn.disabled = false; btn.textContent = "Send my vote";
+      $("err").textContent = "Could not send. Check your connection and try again."; $("err").hidden = false;
+      return;
+    }
+  } else {
+    ok = true; // setup mode: nothing to send to
+  }
+  store("fanclub_done", JSON.stringify({ vote, name: payload.name, ts: Date.now() }));
+  showThanks(payload);
+}
+$("sendBtn").addEventListener("click", submit);
+
+function showThanks(p) {
+  $("stop3").classList.add("done");
+  $("line").hidden = true;
+  document.querySelector(".hero").hidden = true;
+  const v = VOTES.find(x => x.id === (p && p.vote));
+  $("thanksText").textContent = (p && p.name ? p.name + ", t" : "T") + "hank you." + (v ? " Voted: " + v.label + "." : "") + " Wear the button, spread the love.";
+  $("thanks").hidden = false;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  loadStats();
+}
+
+async function loadStats() {
+  if (!CFG.backend) return;
+  try {
+    const r = await fetch(`${CFG.backend}?k=${encodeURIComponent(key)}&t=stats`, { redirect: "follow" });
+    const j = await r.json(); if (!j.ok) return;
+    const total = Object.values(j.votes || {}).reduce((a, b) => a + b, 0) || 1;
+    const bars = $("bars"); bars.innerHTML = "";
+    VOTES.map(v => ({ ...v, n: (j.votes && j.votes[v.id]) || 0 })).sort((a, b) => b.n - a.n).forEach(v => {
+      const d = document.createElement("div"); d.className = "bar";
+      d.innerHTML = `<span>${v.ico} ${v.label}</span><span class="n">${v.n}</span><div class="track"><div class="fill" style="width:${Math.round(v.n / total * 100)}%"></div></div>`;
+      bars.appendChild(d);
+    });
+    $("tally").hidden = false;
+    if (j.selfies && j.selfies.length) {
+      const w = $("wall"); w.innerHTML = "";
+      j.selfies.slice(0, 30).forEach(s => {
+        const f = document.createElement("figure");
+        const img = document.createElement("img"); img.loading = "lazy"; img.alt = s.name ? `Selfie from ${s.name}` : "Fan selfie"; img.src = s.url;
+        f.appendChild(img);
+        if (s.name) { const c = document.createElement("figcaption"); c.textContent = s.name; f.appendChild(c); }
+        w.appendChild(f);
+      });
+      $("wallBox").hidden = false;
+    }
+  } catch (e) { /* stats are a bonus, fail quietly */ }
+}
+
+$("doneBtn").addEventListener("click", openSteps);
+$("again").addEventListener("click", () => { try { localStorage.removeItem("fanclub_done"); } catch (e) {} location.reload(); });
+
+/* ---------- Boot ---------- */
+(async function boot() {
+  setupPayments(); setupChips();
+  const ok = await gate();
+  if (!ok) { $("locked").hidden = false; return; }
+  $("content").hidden = false;
+  const done = load("fanclub_done");
+  if (done) { try { showThanks(JSON.parse(done)); } catch (e) {} }
+})();
+</script>
+</body>
+</html>
