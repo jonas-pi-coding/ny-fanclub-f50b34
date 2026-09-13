@@ -141,6 +141,16 @@
   footer .serif { font-family: var(--serif); font-size: 1.15rem; color: #fff; margin-bottom: 8px; }
 
   .config-note { border: 1px solid var(--rose-line); background: var(--rose-bg); color: var(--rose-ink); border-radius: var(--radius); padding: 10px 14px; font-size: .9rem; margin-bottom: 20px; }
+
+  /* Girocode panel */
+  .giro { display: grid; grid-template-columns: 132px 1fr; gap: 14px; align-items: start; margin-top: 12px; padding: 14px; background: var(--cream); border: 1px solid var(--priory-200); border-radius: var(--radius); }
+  .giro-qr { background: #fff; border: 1px solid var(--hairline); border-radius: var(--radius); padding: 6px; }
+  .giro-qr svg { width: 100%; height: auto; display: block; }
+  .giro-txt { display: grid; gap: 8px; font-size: .9rem; color: var(--muted); }
+  .giro-txt strong { color: var(--priory-900); }
+  .giro-txt .mono { font-variant-numeric: tabular-nums; letter-spacing: .02em; color: var(--priory-900); font-weight: 600; }
+  .giro-txt .btn { padding: .55rem 1rem; font-size: .85rem; width: auto; justify-self: start; }
+  @media (max-width: 380px) { .giro { grid-template-columns: 1fr; } .giro-qr { max-width: 180px; } }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -198,6 +208,16 @@
           <span id="poolLine" hidden>No PayPal account? <a id="poolLink" href="#" target="_blank" rel="noopener">Pay by card via the PayPal pool</a>.</span>
           <span id="meLine" hidden>Prefer PayPal.Me? Send <span id="meLinks"></span> directly.</span>
           <span id="wiseLine" hidden>Wise user? <a id="wiseLink" href="#" target="_blank" rel="noopener">Send via Wise</a>.</span>
+          <span>German bank account? <button class="link" id="giroBtn" type="button" aria-expanded="false" aria-controls="giroBox" style="padding:0;font-size:inherit;color:var(--priory-800)">Transfer 8 € by Girocode</button>.</span>
+        </div>
+        <div class="giro" id="giroBox" hidden>
+          <div class="giro-qr"><svg role="img" aria-label="Girocode for 8 euro bank transfer to Jonas Warmuth" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 258 258" class="segno"><g transform="scale(6)"><path fill="#fff" d="M0 0h43v43h-43z"/><path class="qrline" stroke="#2b2722" d="M1 1.5h7m1 0h1m1 0h1m3 0h1m2 0h5m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h7m-41 1h1m5 0h1m1 0h3m4 0h2m1 0h1m4 0h3m2 0h2m2 0h1m1 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m4 0h1m1 0h5m6 0h1m3 0h1m5 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h3m4 0h3m4 0h3m1 0h3m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h2m2 0h5m1 0h2m1 0h1m2 0h3m1 0h1m1 0h2m1 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m3 0h3m1 0h1m2 0h1m1 0h1m2 0h1m1 0h1m3 0h1m2 0h2m1 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-33 1h3m3 0h1m2 0h1m2 0h1m1 0h2m2 0h7m-33 1h1m1 0h2m1 0h3m4 0h2m3 0h5m3 0h1m2 0h1m2 0h2m1 0h1m2 0h1m1 0h2m-41 1h2m6 0h2m1 0h2m3 0h1m1 0h6m3 0h1m2 0h2m2 0h1m1 0h1m2 0h2m-41 1h4m2 0h1m1 0h1m2 0h1m1 0h2m1 0h2m5 0h1m1 0h1m3 0h1m2 0h1m2 0h1m-36 1h1m1 0h1m2 0h1m1 0h2m2 0h1m2 0h1m4 0h1m2 0h5m6 0h2m5 0h1m-40 1h1m1 0h4m5 0h1m2 0h1m2 0h1m1 0h1m2 0h3m1 0h5m3 0h1m3 0h1m-40 1h6m1 0h2m3 0h1m3 0h1m3 0h1m1 0h4m4 0h1m1 0h1m1 0h2m3 0h1m-39 1h2m3 0h4m1 0h5m2 0h6m2 0h1m2 0h3m2 0h2m1 0h1m1 0h2m-41 1h2m1 0h1m3 0h2m2 0h1m2 0h2m2 0h1m2 0h1m1 0h1m3 0h1m2 0h2m1 0h1m1 0h2m-34 1h1m2 0h1m2 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h2m2 0h3m2 0h2m1 0h1m3 0h1m1 0h2m-40 1h2m1 0h1m3 0h1m2 0h1m1 0h1m7 0h6m1 0h1m1 0h3m1 0h1m3 0h1m-38 1h1m1 0h1m1 0h1m1 0h5m1 0h1m5 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m8 0h1m-38 1h1m1 0h3m2 0h1m3 0h2m3 0h2m1 0h2m1 0h2m2 0h2m2 0h3m1 0h2m1 0h1m-39 1h3m2 0h2m3 0h1m1 0h1m2 0h2m3 0h1m2 0h3m4 0h1m1 0h1m1 0h1m1 0h1m1 0h3m-38 1h3m1 0h1m3 0h4m1 0h2m1 0h1m1 0h1m1 0h4m2 0h3m2 0h3m1 0h2m-40 1h5m1 0h2m5 0h1m1 0h4m1 0h2m1 0h4m1 0h1m3 0h1m4 0h1m1 0h1m-39 1h2m1 0h2m2 0h2m1 0h1m1 0h2m3 0h3m2 0h3m2 0h1m2 0h2m1 0h1m1 0h2m2 0h1m-41 1h1m1 0h1m3 0h2m3 0h2m4 0h1m6 0h1m1 0h1m1 0h1m4 0h1m1 0h1m2 0h3m-41 1h2m1 0h1m3 0h1m2 0h1m1 0h3m3 0h2m4 0h1m1 0h1m1 0h3m1 0h1m2 0h1m2 0h1m1 0h1m-39 1h1m2 0h2m1 0h1m2 0h1m4 0h2m1 0h3m2 0h2m3 0h3m1 0h1m2 0h1m1 0h1m1 0h1m-41 1h1m3 0h1m5 0h1m1 0h2m4 0h6m2 0h1m3 0h2m3 0h1m1 0h1m2 0h1m-41 1h2m4 0h5m4 0h1m1 0h2m1 0h2m2 0h3m6 0h1m1 0h1m2 0h1m-38 1h1m1 0h1m1 0h1m1 0h1m2 0h1m3 0h3m2 0h2m4 0h2m2 0h2m1 0h2m1 0h1m1 0h4m-41 1h1m1 0h1m1 0h1m1 0h2m2 0h1m2 0h2m3 0h2m1 0h1m8 0h1m1 0h2m2 0h1m1 0h1m-36 1h3m1 0h2m1 0h1m1 0h1m4 0h3m3 0h1m2 0h5m6 0h3m-39 1h3m2 0h1m5 0h1m4 0h2m6 0h5m1 0h7m1 0h2m-33 1h1m2 0h2m1 0h4m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-41 1h7m1 0h1m3 0h2m1 0h2m1 0h1m1 0h1m2 0h3m3 0h1m2 0h1m1 0h1m1 0h1m1 0h2m-40 1h1m5 0h1m1 0h1m3 0h1m1 0h4m2 0h1m2 0h1m4 0h1m1 0h3m3 0h2m1 0h2m-41 1h1m1 0h3m1 0h1m2 0h2m3 0h2m3 0h3m4 0h3m1 0h1m1 0h5m1 0h1m-39 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h2m1 0h1m2 0h3m1 0h2m4 0h1m2 0h2m-40 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h7m1 0h1m5 0h2m1 0h3m3 0h1m1 0h2m-41 1h1m5 0h1m2 0h1m5 0h2m4 0h1m2 0h1m2 0h1m3 0h4m1 0h2m1 0h1m-40 1h7m1 0h3m1 0h1m2 0h1m3 0h1m2 0h2m1 0h1m3 0h2m1 0h1m4 0h3"/></g></svg>
+</div>
+          <div class="giro-txt">
+            <p><strong>German banking app?</strong> Scan with Sparkasse, ING, DKB, N26 or any other app. 8 € to Jonas, no fees, he passes it on.</p>
+            <p class="mono" id="ibanText">DE58 4306 0967 1071 0794 00</p>
+            <button class="btn ghost" id="copyIban" type="button">Copy IBAN</button>
+          </div>
         </div>
         <button class="btn red mt" id="doneBtn" type="button">Done, I chipped in <span class="heart" aria-hidden="true">♥</span></button>
       </li>
@@ -471,6 +491,11 @@ async function loadStats() {
   } catch (e) { /* stats are a bonus, fail quietly */ }
 }
 
+
+$("giroBtn").addEventListener("click", () => { const b = $("giroBox"); b.hidden = !b.hidden; $("giroBtn").setAttribute("aria-expanded", String(!b.hidden)); });
+$("copyIban").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText("DE58430609671071079400"); $("copyIban").textContent = "Copied"; setTimeout(() => $("copyIban").textContent = "Copy IBAN", 1800); } catch (e) {}
+});
 $("doneBtn").addEventListener("click", openSteps);
 $("again").addEventListener("click", () => { try { localStorage.removeItem("fanclub_done"); } catch (e) {} location.reload(); });
 
