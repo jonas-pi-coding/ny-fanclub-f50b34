@@ -597,9 +597,20 @@ async function runStylist(id) {
 const VOTE_LABEL = Object.fromEntries(VOTES.map(v => [v.id, v.label]));
 let lbState = null;
 function big(url) { return url ? url.replace(/sz=w\d+/, "sz=w1200") : url; }
+// Show the already cached wall thumbnail at once, then swap to the large
+// version when it has arrived. Drive takes a second or two for the big one.
+function showLbImage(url) {
+  const img = $("lbImg");
+  img.src = url;
+  const large = big(url);
+  if (large === url) return;
+  const pre = new Image();
+  pre.onload = () => { if (lbState && img.src === url) img.src = large; };
+  pre.src = large;
+}
 function openLightbox(s) {
   lbState = { orig: s.orig, edited: s.edited, showingEdited: !!(s.edited && s.url === s.edited) };
-  $("lbImg").src = big(lbState.showingEdited ? s.edited : s.orig);
+  showLbImage(lbState.showingEdited ? s.edited : s.orig);
   $("lbImg").alt = s.name ? `Selfie from ${s.name}` : "Fan selfie";
   $("lbName").textContent = s.name || "";
   $("lbVote").textContent = s.vote && VOTE_LABEL[s.vote] ? "voted " + VOTE_LABEL[s.vote] : "";
@@ -622,7 +633,7 @@ document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("ligh
 $("lbToggle").addEventListener("click", () => {
   if (!lbState) return;
   lbState.showingEdited = !lbState.showingEdited;
-  $("lbImg").src = big(lbState.showingEdited ? lbState.edited : lbState.orig);
+  showLbImage(lbState.showingEdited ? lbState.edited : lbState.orig);
   syncLbToggle();
 });
 
