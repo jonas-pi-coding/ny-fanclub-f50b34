@@ -129,6 +129,10 @@
   .wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .wall figure { margin: 0; aspect-ratio: 4 / 5; border-radius: var(--radius); overflow: hidden; background: var(--priory-100); position: relative; border: 1px solid var(--hairline); }
   .wall img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .wallhint { font-size: .85rem; color: var(--muted); margin: -2px 0 10px; }
+  .wall figure.ai::after { content: "NY"; position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; border-radius: 50%; background: var(--heart); color: #fff; font-size: 9px; font-weight: 700; display: grid; place-items: center; letter-spacing: .02em; }
+  .wall figure { cursor: pointer; }
+  .wall figcaption:empty { display: none; }
   .wall figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 6px 8px; font-size: 11px; color: #fff; background: linear-gradient(transparent, rgba(43,39,34,.7)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* Locked */
@@ -142,6 +146,16 @@
 
   .config-note { border: 1px solid var(--rose-line); background: var(--rose-bg); color: var(--rose-ink); border-radius: var(--radius); padding: 10px 14px; font-size: .9rem; margin-bottom: 20px; }
 
+  /* Stylist pick */
+  .stylist { background: #fff; border: 1px solid var(--hairline); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow-sm); display: grid; gap: 10px; }
+  .stylist-status { font-size: .92rem; color: var(--muted); }
+  .stylist-status.is-failed { color: var(--rose-ink); }
+  .stylist-hint { font-size: .85rem; color: var(--muted); }
+  .picks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pick { display: grid; gap: 6px; padding: 6px; border-radius: var(--radius); border: 1px solid var(--priory-200); background: var(--cream); cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--muted); text-align: center; transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease; }
+  .pick img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 2px; display: block; background: var(--priory-100); }
+  .pick[aria-pressed="true"] { border-color: var(--sage-500); background: var(--sage-100); box-shadow: 0 0 0 1px var(--sage-500); color: var(--sage-700); }
+  .pick[aria-pressed="true"] span::after { content: " · on the wall"; font-weight: 400; }
   /* Girocode panel */
   .giro { display: grid; grid-template-columns: 132px 1fr; gap: 14px; align-items: start; margin-top: 12px; padding: 14px; background: var(--cream); border: 1px solid var(--priory-200); border-radius: var(--radius); }
   .giro-qr { background: #fff; border: 1px solid var(--hairline); border-radius: var(--radius); padding: 6px; }
@@ -257,12 +271,28 @@
         <h2>You're in the fan club.</h2>
         <p id="thanksText">Thank you. Wear the button, spread the love.</p>
       </div>
+      <div class="stylist" id="stylist" hidden>
+        <h3 class="wallhead">Your fan club portrait</h3>
+        <p class="stylist-status" id="stylistStatus">Our stylist is adding extra I ♥ NY. This takes about a minute.</p>
+        <div class="picks" id="picks" hidden>
+          <button class="pick" type="button" data-pick="orig" aria-pressed="false">
+            <img id="pickOrigImg" alt="Your original selfie">
+            <span>Original</span>
+          </button>
+          <button class="pick" type="button" data-pick="edited" aria-pressed="true">
+            <img id="pickEditedImg" alt="Your selfie with extra I love NY">
+            <span>Extra I ♥ NY</span>
+          </button>
+        </div>
+        <p class="stylist-hint" id="pickHint" hidden>Tap the other one to put it on the fan wall instead.</p>
+      </div>
       <div class="tally" id="tally" hidden>
         <h3>Fan club vote so far</h3>
         <div id="bars"></div>
       </div>
       <div id="wallBox" hidden>
         <h3 class="wallhead">Fan wall</h3>
+        <p class="wallhint" id="wallHint" hidden>Our AI stylist adds extra I ♥ NY to every selfie. Tap a photo to see the original.</p>
         <div class="wall" id="wall"></div>
       </div>
       <button class="link" id="again" type="button">Someone else wants to join? Start over</button>
@@ -308,6 +338,7 @@ const $ = (id) => document.getElementById(id);
 let key = "";
 let selfieDataUrl = null;
 let vote = null;
+let entryId = null;
 
 function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -440,6 +471,7 @@ async function submit() {
       const r = await fetch(CFG.backend, { method: "POST", body: JSON.stringify(payload), headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow" });
       const j = await r.json(); ok = !!j.ok;
       if (!ok) throw new Error(j.error || "server");
+      entryId = j.id || null;
     } catch (e) {
       btn.disabled = false; btn.textContent = "Send my vote";
       $("err").textContent = "Could not send. Check your connection and try again."; $("err").hidden = false;
@@ -448,8 +480,8 @@ async function submit() {
   } else {
     ok = true; // setup mode: nothing to send to
   }
-  store("fanclub_done", JSON.stringify({ vote, name: payload.name, ts: Date.now() }));
-  showThanks(payload);
+  store("fanclub_done", JSON.stringify({ vote, name: payload.name, id: entryId, selfie: !!selfieDataUrl, ts: Date.now() }));
+  showThanks({ ...payload, id: entryId, selfie: !!selfieDataUrl });
 }
 $("sendBtn").addEventListener("click", submit);
 
@@ -461,7 +493,47 @@ function showThanks(p) {
   $("thanksText").textContent = (p && p.name ? p.name + ", t" : "T") + "hank you." + (v ? " Voted: " + v.label + "." : "") + " Wear the button, spread the love.";
   $("thanks").hidden = false;
   window.scrollTo({ top: 0, behavior: "smooth" });
+  if (p && p.id && p.selfie && CFG.backend) { entryId = p.id; runStylist(p.id); }
   loadStats();
+}
+
+
+/* ---------- The stylist: an AI pass that adds more I love NY ---------- */
+async function sendPick(id, pick) {
+  try {
+    await fetch(CFG.backend, { method: "POST", body: JSON.stringify({ k: key, id, pick }), headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow" });
+  } catch (e) { /* the wall falls back to the original, no need to bother the guest */ }
+}
+
+function showPicks(id, orig, edited) {
+  $("pickOrigImg").src = orig;
+  $("pickEditedImg").src = edited;
+  $("stylistStatus").hidden = true;
+  $("picks").hidden = false;
+  $("pickHint").hidden = false;
+  sendPick(id, "edited");
+  document.querySelectorAll(".pick").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll(".pick").forEach(o => o.setAttribute("aria-pressed", String(o === b)));
+      sendPick(id, b.dataset.pick);
+      setTimeout(loadStats, 400);
+    });
+  });
+}
+
+async function runStylist(id) {
+  $("stylist").hidden = false;
+  try {
+    const r = await fetch(`${CFG.backend}?k=${encodeURIComponent(key)}&t=edit&id=${encodeURIComponent(id)}`, { redirect: "follow" });
+    const j = await r.json();
+    if (j.ok && j.status === "done" && j.edited) { showPicks(id, j.orig, j.edited); return; }
+    if (j.ok && j.status === "skipped") { $("stylist").hidden = true; return; }
+    throw new Error((j && j.error) || "no result");
+  } catch (e) {
+    const st = $("stylistStatus");
+    st.textContent = "The stylist is busy right now. Your original selfie is on the wall.";
+    st.classList.add("is-failed");
+  }
 }
 
 async function loadStats() {
@@ -481,12 +553,27 @@ async function loadStats() {
       const w = $("wall"); w.innerHTML = "";
       j.selfies.slice(0, 30).forEach(s => {
         const f = document.createElement("figure");
-        const img = document.createElement("img"); img.loading = "lazy"; img.alt = s.name ? `Selfie from ${s.name}` : "Fan selfie"; img.src = s.url;
+        const img = document.createElement("img"); img.loading = "lazy";
+        img.alt = s.name ? `Selfie from ${s.name}` : "Fan selfie";
+        img.src = s.url;
         f.appendChild(img);
-        if (s.name) { const c = document.createElement("figcaption"); c.textContent = s.name; f.appendChild(c); }
+        const cap = document.createElement("figcaption");
+        cap.textContent = s.name || "";
+        f.appendChild(cap);
+        if (s.edited && s.orig) {
+          // Edited by the fan club's AI stylist. Tap to peek at the original.
+          f.classList.add("ai"); f.title = "Tap to see the original";
+          let showingEdited = true;
+          f.addEventListener("click", () => {
+            showingEdited = !showingEdited;
+            img.src = showingEdited ? s.edited : s.orig;
+            f.classList.toggle("ai", showingEdited);
+          });
+        }
         w.appendChild(f);
       });
       $("wallBox").hidden = false;
+      $("wallHint").hidden = !j.selfies.some(s => s.edited);
     }
   } catch (e) { /* stats are a bonus, fail quietly */ }
 }
