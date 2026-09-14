@@ -156,6 +156,27 @@
   .pick img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 2px; display: block; background: var(--priory-100); }
   .pick[aria-pressed="true"] { border-color: var(--sage-500); background: var(--sage-100); box-shadow: 0 0 0 1px var(--sage-500); color: var(--sage-700); }
   .pick[aria-pressed="true"] span::after { content: " · on the wall"; font-weight: 400; }
+  /* Stylist wait state */
+  .stylist-wait { display: grid; gap: 10px; }
+  .stylist-bar { height: 4px; border-radius: 2px; background: var(--priory-100); overflow: hidden; }
+  .stylist-bar span { display: block; height: 100%; width: 38%; border-radius: 2px; background: linear-gradient(90deg, var(--sage-300), var(--sage-500), var(--heart)); animation: slide 1.6s ease-in-out infinite alternate; }
+  @keyframes slide { from { transform: translateX(-20%); } to { transform: translateX(200%); } }
+  .stylist-status { min-height: 1.4em; }
+
+  /* Lightbox */
+  .lightbox { position: fixed; inset: 0; z-index: 50; background: rgba(43,39,34,.92); display: grid; grid-template-rows: 1fr auto; align-items: center; justify-items: center; padding: 56px 16px 20px; gap: 14px; }
+  .lb-figure { margin: 0; max-width: min(92vw, 560px); width: 100%; display: grid; gap: 10px; justify-items: center; }
+  .lb-figure img { max-width: 100%; max-height: min(72vh, 900px); border-radius: var(--radius); box-shadow: var(--shadow-lg); display: block; background: var(--priory-100); }
+  .lb-cap { color: var(--priory-100); font-size: .9rem; display: flex; gap: 10px; align-items: baseline; }
+  .lb-cap:empty { display: none; }
+  .lb-vote { color: var(--priory-300); font-size: .8rem; }
+  .lb-close { position: absolute; top: 10px; right: 12px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.08); color: #fff; font-size: 1.5rem; line-height: 1; cursor: pointer; }
+  .lb-close:hover { background: rgba(255,255,255,.18); }
+  .lb-tools { display: flex; gap: 8px; }
+  .lb-toggle { background: transparent; color: var(--priory-100); border: 1px solid var(--priory-300); border-radius: 999px; padding: .5rem 1.1rem; font-size: .85rem; font-weight: 500; cursor: pointer; }
+  .lb-toggle:hover { background: rgba(255,255,255,.1); }
+  body.lb-open { overflow: hidden; }
+  .wall figure { cursor: zoom-in; }
   /* Girocode panel */
   .giro { display: grid; grid-template-columns: 132px 1fr; gap: 14px; align-items: start; margin-top: 12px; padding: 14px; background: var(--cream); border: 1px solid var(--priory-200); border-radius: var(--radius); }
   .giro-qr { background: #fff; border: 1px solid var(--hairline); border-radius: var(--radius); padding: 6px; }
@@ -273,7 +294,10 @@
       </div>
       <div class="stylist" id="stylist" hidden>
         <h3 class="wallhead">Your fan club portrait</h3>
-        <p class="stylist-status" id="stylistStatus">Our stylist is adding extra I ♥ NY. This takes about a minute.</p>
+        <div class="stylist-wait" id="stylistWait">
+          <div class="stylist-bar" aria-hidden="true"><span></span></div>
+          <p class="stylist-status" id="stylistStatus" aria-live="polite">Adding love to your photo…</p>
+        </div>
         <div class="picks" id="picks" hidden>
           <button class="pick" type="button" data-pick="orig" aria-pressed="false">
             <img id="pickOrigImg" alt="Your original selfie">
@@ -292,7 +316,7 @@
       </div>
       <div id="wallBox" hidden>
         <h3 class="wallhead">Fan wall</h3>
-        <p class="wallhint" id="wallHint" hidden>Our AI stylist adds extra I ♥ NY to every selfie. Tap a photo to see the original.</p>
+        <p class="wallhint" id="wallHint" hidden>Tap a photo to see it big. Styled portraits carry a red NY badge, you can flip to the original.</p>
         <div class="wall" id="wall"></div>
       </div>
       <button class="link" id="again" type="button">Someone else wants to join? Start over</button>
@@ -300,6 +324,17 @@
 
   </div>
 </main>
+
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Fan wall photo">
+  <button class="lb-close" id="lbClose" type="button" aria-label="Close">×</button>
+  <figure class="lb-figure">
+    <img id="lbImg" alt="">
+    <figcaption class="lb-cap"><span id="lbName"></span><span id="lbVote" class="lb-vote"></span></figcaption>
+  </figure>
+  <div class="lb-tools" id="lbTools" hidden>
+    <button class="lb-toggle" id="lbToggle" type="button" aria-pressed="false">Show original</button>
+  </div>
+</div>
 
 <footer>
   <p class="serif">Niklas &amp; Yamur · New York, someday soon</p>
@@ -508,7 +543,8 @@ async function sendPick(id, pick) {
 function showPicks(id, orig, edited) {
   $("pickOrigImg").src = orig;
   $("pickEditedImg").src = edited;
-  $("stylistStatus").hidden = true;
+  stopStylistLines();
+  $("stylistWait").hidden = true;
   $("picks").hidden = false;
   $("pickHint").hidden = false;
   sendPick(id, "edited");
@@ -521,20 +557,74 @@ function showPicks(id, orig, edited) {
   });
 }
 
+const STYLIST_LINES = [
+  "Adding love to your photo…",
+  "Pinning a few more buttons on you…",
+  "Sprinkling heart confetti…",
+  "Raiding the photo booth prop box…",
+  "Trying a top hat. Or sunglasses. Or both…",
+  "Almost there, the stylist is fussy…"
+];
+let stylistTimer = null;
+function startStylistLines() {
+  let i = 0; const el = $("stylistStatus");
+  el.textContent = STYLIST_LINES[0];
+  stopStylistLines();
+  stylistTimer = setInterval(() => { i = (i + 1) % STYLIST_LINES.length; el.textContent = STYLIST_LINES[i]; }, 2800);
+}
+function stopStylistLines() { if (stylistTimer) { clearInterval(stylistTimer); stylistTimer = null; } }
+
 async function runStylist(id) {
   $("stylist").hidden = false;
+  startStylistLines();
   try {
     const r = await fetch(`${CFG.backend}?k=${encodeURIComponent(key)}&t=edit&id=${encodeURIComponent(id)}`, { redirect: "follow" });
     const j = await r.json();
     if (j.ok && j.status === "done" && j.edited) { showPicks(id, j.orig, j.edited); return; }
-    if (j.ok && j.status === "skipped") { $("stylist").hidden = true; return; }
+    if (j.ok && j.status === "skipped") { stopStylistLines(); $("stylist").hidden = true; return; }
     throw new Error((j && j.error) || "no result");
   } catch (e) {
+    stopStylistLines();
+    document.querySelector(".stylist-bar").hidden = true;
     const st = $("stylistStatus");
     st.textContent = "The stylist is busy right now. Your original selfie is on the wall.";
     st.classList.add("is-failed");
   }
 }
+
+
+/* ---------- Lightbox for the fan wall ---------- */
+const VOTE_LABEL = Object.fromEntries(VOTES.map(v => [v.id, v.label]));
+let lbState = null;
+function big(url) { return url ? url.replace(/sz=w\d+/, "sz=w1200") : url; }
+function openLightbox(s) {
+  lbState = { orig: s.orig, edited: s.edited, showingEdited: !!(s.edited && s.url === s.edited) };
+  $("lbImg").src = big(lbState.showingEdited ? s.edited : s.orig);
+  $("lbImg").alt = s.name ? `Selfie from ${s.name}` : "Fan selfie";
+  $("lbName").textContent = s.name || "";
+  $("lbVote").textContent = s.vote && VOTE_LABEL[s.vote] ? "voted " + VOTE_LABEL[s.vote] : "";
+  const both = !!(s.orig && s.edited);
+  $("lbTools").hidden = !both;
+  if (both) syncLbToggle();
+  $("lightbox").hidden = false;
+  document.body.classList.add("lb-open");
+  $("lbClose").focus();
+}
+function syncLbToggle() {
+  const b = $("lbToggle");
+  b.textContent = lbState.showingEdited ? "Show original" : "Show extra I ♥ NY";
+  b.setAttribute("aria-pressed", String(!lbState.showingEdited));
+}
+function closeLightbox() { $("lightbox").hidden = true; document.body.classList.remove("lb-open"); lbState = null; }
+$("lbClose").addEventListener("click", closeLightbox);
+$("lightbox").addEventListener("click", (e) => { if (e.target === $("lightbox")) closeLightbox(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("lightbox").hidden) closeLightbox(); });
+$("lbToggle").addEventListener("click", () => {
+  if (!lbState) return;
+  lbState.showingEdited = !lbState.showingEdited;
+  $("lbImg").src = big(lbState.showingEdited ? lbState.edited : lbState.orig);
+  syncLbToggle();
+});
 
 async function loadStats() {
   if (!CFG.backend) return;
@@ -560,16 +650,8 @@ async function loadStats() {
         const cap = document.createElement("figcaption");
         cap.textContent = s.name || "";
         f.appendChild(cap);
-        if (s.edited && s.orig) {
-          // Edited by the fan club's AI stylist. Tap to peek at the original.
-          f.classList.add("ai"); f.title = "Tap to see the original";
-          let showingEdited = true;
-          f.addEventListener("click", () => {
-            showingEdited = !showingEdited;
-            img.src = showingEdited ? s.edited : s.orig;
-            f.classList.toggle("ai", showingEdited);
-          });
-        }
+        if (s.edited && s.url === s.edited) f.classList.add("ai");
+        f.addEventListener("click", () => openLightbox(s));
         w.appendChild(f);
       });
       $("wallBox").hidden = false;
