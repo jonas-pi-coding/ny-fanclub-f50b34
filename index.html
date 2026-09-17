@@ -88,6 +88,10 @@
   .btn .heart { color: #f2b0a8; }
   .btn.ghost { background: transparent; color: var(--priory-800); border-color: var(--priory-300); box-shadow: none; }
   .btn.ghost:hover { background: var(--priory-50); border-color: var(--priory-400); }
+  .btn.pay { background: var(--priory-900); color: var(--cream); flex-wrap: wrap; padding: 1rem 1.2rem; text-decoration: none; }
+  .btn.pay:hover { background: #2b211a; }
+  .btn.pay .pp { width: 26px; height: 26px; border-radius: 50%; background: var(--cream); color: var(--priory-900); display: inline-grid; place-items: center; font-family: var(--serif); font-weight: 700; font-size: 1rem; }
+  .btn.pay .sub { flex-basis: 100%; font-weight: 400; font-size: .8rem; color: rgba(246,244,239,.75); margin-top: 2px; }
   .mt { margin-top: 16px; }
   .row { display: flex; gap: 10px; align-items: center; }
   .row .btn { flex: 1; }
@@ -233,17 +237,13 @@
       <li class="stop" id="stop1">
         <span class="bullet" aria-hidden="true"><span>1</span></span>
         <h2>Chip in</h2>
-        <p class="hint" id="payHint">Suggested amounts. Opens the PayPal pool, pay by card or PayPal, no account needed.</p>
-        <div class="amounts" id="amounts">
-          <a class="amt" data-cur="EUR" href="#" target="_blank" rel="noopener"><span class="coin">€8</span><span class="lbl">Euro</span></a>
-          <a class="amt" data-cur="GBP" href="#" target="_blank" rel="noopener"><span class="coin">£7</span><span class="lbl">Pounds</span></a>
-          <a class="amt" data-cur="USD" href="#" target="_blank" rel="noopener"><span class="coin">$9</span><span class="lbl">Dollars</span></a>
-        </div>
-        <div class="alt" id="alt">
-          <span id="poolLine" hidden>No PayPal account? <a id="poolLink" href="#" target="_blank" rel="noopener">Pay by card via the PayPal pool</a>.</span>
-          <span id="meLine" hidden>Prefer PayPal.Me? Send <span id="meLinks"></span> directly.</span>
-          <span id="wiseLine" hidden>Wise user? <a id="wiseLink" href="#" target="_blank" rel="noopener">Send via Wise</a>.</span>
-          <span>German bank account? <button class="link" id="giroBtn" type="button" aria-expanded="false" aria-controls="giroBox" style="padding:0;font-size:inherit;color:var(--priory-800)">Transfer 8 € by Girocode</button>.</span>
+        <p class="hint" id="payHint">Suggested €8, £7 or $9. Any amount works.</p>
+        <a class="btn pay mt" id="payBtn" href="#" target="_blank" rel="noopener">
+          <span class="pp" aria-hidden="true">P</span> Chip in with PayPal <span class="sub">card or PayPal, no account needed</span>
+        </a>
+        <div class="alt mt" id="alt">
+          <span>German bank account? <button class="link" id="giroBtn" type="button" aria-expanded="false" aria-controls="giroBox" style="padding:0;font-size:inherit;color:var(--priory-800)">Transfer 8 € by Girocode or IBAN</button>.</span>
+          <span>Cash? There is a jar next to the buttons.</span>
         </div>
         <div class="giro" id="giroBox" hidden>
           <div class="giro-qr"><svg role="img" aria-label="Girocode for 8 euro bank transfer to Jonas Warmuth" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 258 258" class="segno"><g transform="scale(6)"><path fill="#fff" d="M0 0h43v43h-43z"/><path class="qrline" stroke="#2b2722" d="M1 1.5h7m1 0h1m3 0h1m1 0h1m1 0h3m2 0h6m1 0h1m1 0h3m1 0h7m-41 1h1m5 0h1m2 0h2m4 0h1m5 0h1m8 0h1m3 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m1 0h4m3 0h1m1 0h1m3 0h2m1 0h9m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h1m3 0h2m3 0h1m2 0h2m1 0h2m1 0h2m3 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h2m1 0h2m1 0h2m3 0h3m1 0h1m2 0h1m1 0h2m3 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m1 0h2m1 0h1m4 0h1m1 0h1m1 0h1m1 0h1m2 0h1m8 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-30 1h3m1 0h1m8 0h1m2 0h1m2 0h2m-32 1h1m1 0h1m3 0h2m1 0h4m4 0h1m2 0h2m1 0h3m2 0h4m3 0h1m2 0h1m1 0h1m-41 1h2m6 0h1m2 0h2m3 0h1m1 0h1m1 0h1m3 0h1m4 0h1m1 0h1m1 0h2m5 0h1m-40 1h2m1 0h1m1 0h2m1 0h1m1 0h1m7 0h1m2 0h2m1 0h1m1 0h3m1 0h4m2 0h1m2 0h1m-41 1h1m2 0h1m3 0h1m2 0h2m2 0h2m3 0h2m1 0h3m3 0h1m1 0h2m3 0h1m1 0h1m1 0h2m-39 1h7m1 0h3m2 0h1m2 0h3m1 0h1m2 0h1m1 0h2m3 0h1m1 0h2m1 0h4m-41 1h1m7 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h6m1 0h1m1 0h4m4 0h4m-40 1h4m1 0h1m2 0h4m3 0h3m1 0h1m1 0h2m3 0h1m2 0h2m1 0h2m4 0h2m-40 1h2m1 0h2m1 0h1m6 0h2m2 0h3m3 0h1m2 0h1m3 0h1m5 0h1m-37 1h3m2 0h1m1 0h2m2 0h1m1 0h3m3 0h2m1 0h2m1 0h1m2 0h1m3 0h2m2 0h1m1 0h2m-41 1h1m3 0h1m2 0h2m1 0h1m1 0h2m3 0h1m2 0h1m4 0h3m3 0h1m1 0h2m2 0h1m2 0h1m-40 1h2m1 0h3m3 0h1m1 0h3m1 0h1m2 0h17m4 0h1m-40 1h1m1 0h1m1 0h1m3 0h3m2 0h1m2 0h1m5 0h1m2 0h2m2 0h1m5 0h1m3 0h1m-41 1h1m1 0h2m2 0h1m1 0h2m1 0h1m1 0h1m3 0h1m1 0h1m1 0h2m4 0h2m2 0h1m2 0h2m3 0h1m-40 1h2m2 0h1m2 0h4m2 0h1m1 0h1m3 0h1m3 0h1m5 0h5m3 0h2m-38 1h1m2 0h1m1 0h3m1 0h4m1 0h2m1 0h4m1 0h2m2 0h2m1 0h2m1 0h1m1 0h1m1 0h2m1 0h1m-41 1h2m2 0h2m2 0h1m1 0h2m1 0h2m1 0h1m1 0h1m3 0h1m3 0h1m6 0h1m3 0h1m1 0h2m-37 1h1m1 0h3m2 0h1m3 0h1m1 0h5m2 0h2m3 0h1m1 0h4m4 0h2m-38 1h1m3 0h1m4 0h3m1 0h1m3 0h1m3 0h1m3 0h1m1 0h1m2 0h2m-32 1h1m2 0h1m4 0h2m6 0h1m1 0h5m1 0h1m1 0h1m1 0h2m2 0h2m3 0h1m-40 1h2m1 0h1m2 0h1m2 0h5m1 0h1m1 0h1m4 0h2m1 0h2m2 0h2m2 0h1m2 0h1m-35 1h1m1 0h2m1 0h2m3 0h1m4 0h2m2 0h1m3 0h3m2 0h2m1 0h1m2 0h4m-39 1h1m2 0h1m1 0h3m2 0h1m2 0h1m1 0h2m2 0h4m1 0h2m2 0h3m1 0h2m1 0h4m-41 1h4m2 0h1m2 0h1m1 0h4m1 0h1m2 0h1m3 0h1m1 0h5m1 0h1m1 0h2m1 0h2m1 0h2m-39 1h2m1 0h1m1 0h2m1 0h2m1 0h3m8 0h1m5 0h1m6 0h1m1 0h1m-40 1h2m1 0h1m2 0h1m1 0h1m1 0h2m1 0h1m1 0h2m1 0h4m2 0h1m1 0h2m1 0h1m2 0h6m1 0h2m-33 1h1m1 0h2m1 0h2m1 0h1m2 0h1m1 0h2m3 0h1m1 0h1m1 0h3m3 0h1m-37 1h7m1 0h1m1 0h3m1 0h2m1 0h3m3 0h5m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m-41 1h1m5 0h1m2 0h2m2 0h1m1 0h2m1 0h1m2 0h1m4 0h1m1 0h1m1 0h1m1 0h1m3 0h1m3 0h1m-41 1h1m1 0h3m1 0h1m2 0h3m1 0h3m1 0h2m2 0h1m1 0h1m3 0h2m1 0h7m2 0h1m-40 1h1m1 0h3m1 0h1m2 0h3m2 0h1m1 0h4m1 0h1m1 0h1m3 0h2m8 0h1m2 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m1 0h3m2 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m2 0h2m1 0h1m1 0h1m-41 1h1m5 0h1m4 0h1m1 0h2m1 0h2m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h2m3 0h1m-38 1h7m1 0h1m4 0h2m3 0h2m2 0h4m1 0h3m2 0h1m3 0h2m2 0h1"/></g></svg>
@@ -352,8 +352,10 @@ const CFG = {
   wiseUrl: "",
   // Google Apps Script web app URL (ends with /exec). "" = votes stay on this phone only.
   backend: "https://script.google.com/macros/s/AKfycbwSbbUZSqiAoyzUXrqjtIgqUJAZ2JI24D_mJY1w7rQAxJUuqhUTdeybOg5icuRp-n-3/exec",
-  // SHA-256 hex of the secret key that lives in the QR URL as ?k=... . "" = no gate (setup mode).
-  keyHash: "7737f55bded2a6461488a66b79a09583d52ef1410141f21317d2d2c7cf4d35a0",
+  // SHA-256 hex of the gate key that lives in the QR URL as ?k=... . "" = no gate (setup mode).
+  // The backend keeps its own key (backendKey), so the QR key can change without touching Apps Script.
+  keyHash: "a2ceb6617356faf50fed1cc7377aaa074cb9e9edb0f76db9caba0326dabcdb10",
+  backendKey: "70f65d43437f",
   amounts: { EUR: 8, GBP: 7, USD: 9 },
 };
 
@@ -397,31 +399,10 @@ async function gate() {
 
 /* ---------- Render ---------- */
 function setupPayments() {
-  const coins = document.querySelectorAll(".amt");
-  if (CFG.poolUrl) {
-    // Pool is the primary path: works by card without a PayPal account.
-    coins.forEach(a => { a.href = CFG.poolUrl; });
-    if (CFG.paypalMe) {
-      $("meLinks").innerHTML = Object.entries(CFG.amounts).map(([cur, amt]) =>
-        `<a href="https://paypal.me/${CFG.paypalMe}/${amt}${cur}" target="_blank" rel="noopener">${amt} ${cur}</a>`).join(" · ");
-      $("meLine").hidden = false;
-    }
-  } else if (CFG.paypalMe) {
-    $("payHint").textContent = "Pick your currency. Opens PayPal, any amount works.";
-    coins.forEach(a => { a.href = `https://paypal.me/${CFG.paypalMe}/${CFG.amounts[a.dataset.cur]}${a.dataset.cur}`; });
-  } else {
-    coins.forEach(a => { a.href = "#"; a.addEventListener("click", e => { e.preventDefault(); alert("Payment link not configured yet."); }); });
-  }
-  if (CFG.wiseUrl) {
-    const line = $("wiseLine");
-    if (typeof CFG.wiseUrl === "string") { $("wiseLink").href = CFG.wiseUrl; }
-    else {
-      const parts = Object.entries(CFG.wiseUrl).filter(([, u]) => u).map(([cur, u]) => `<a href="${u}" target="_blank" rel="noopener">${cur}</a>`);
-      if (!parts.length) return;
-      line.innerHTML = "Wise user? Send via Wise in " + parts.join(", ") + ".";
-    }
-    line.hidden = false;
-  }
+  const btn = $("payBtn");
+  if (CFG.poolUrl) { btn.href = CFG.poolUrl; }
+  else if (CFG.paypalMe) { btn.href = `https://paypal.me/${CFG.paypalMe}/${CFG.amounts.EUR}EUR`; }
+  else { btn.href = "#"; btn.addEventListener("click", e => { e.preventDefault(); alert("Payment link not configured yet."); }); }
 }
 
 function setupChips() {
@@ -499,7 +480,7 @@ $("retake").addEventListener("click", () => { $("file").value = ""; $("file").cl
 /* ---------- Submit ---------- */
 async function submit() {
   const btn = $("sendBtn"); btn.disabled = true; btn.textContent = "Sending…"; $("err").hidden = true;
-  const payload = { k: key, name: ($("name").value || "").trim().slice(0, 60), vote, selfie: selfieDataUrl, ua: navigator.userAgent.slice(0, 120) };
+  const payload = { k: CFG.backendKey, name: ($("name").value || "").trim().slice(0, 60), vote, selfie: selfieDataUrl, ua: navigator.userAgent.slice(0, 120) };
   let ok = false;
   if (CFG.backend) {
     try {
@@ -536,7 +517,7 @@ function showThanks(p) {
 /* ---------- The stylist: an AI pass that adds more I love NY ---------- */
 async function sendPick(id, pick) {
   try {
-    await fetch(CFG.backend, { method: "POST", body: JSON.stringify({ k: key, id, pick }), headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow" });
+    await fetch(CFG.backend, { method: "POST", body: JSON.stringify({ k: CFG.backendKey, id, pick }), headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow" });
   } catch (e) { /* the wall falls back to the original, no need to bother the guest */ }
 }
 
@@ -578,7 +559,7 @@ async function runStylist(id) {
   $("stylist").hidden = false;
   startStylistLines();
   try {
-    const r = await fetch(`${CFG.backend}?k=${encodeURIComponent(key)}&t=edit&id=${encodeURIComponent(id)}`, { redirect: "follow" });
+    const r = await fetch(`${CFG.backend}?k=${encodeURIComponent(CFG.backendKey)}&t=edit&id=${encodeURIComponent(id)}`, { redirect: "follow" });
     const j = await r.json();
     if (j.ok && j.status === "done" && j.edited) { showPicks(id, j.orig, j.edited); return; }
     if (j.ok && j.status === "skipped") { stopStylistLines(); $("stylist").hidden = true; return; }
@@ -640,7 +621,7 @@ $("lbToggle").addEventListener("click", () => {
 async function loadStats() {
   if (!CFG.backend) return;
   try {
-    const r = await fetch(`${CFG.backend}?k=${encodeURIComponent(key)}&t=stats`, { redirect: "follow" });
+    const r = await fetch(`${CFG.backend}?k=${encodeURIComponent(CFG.backendKey)}&t=stats`, { redirect: "follow" });
     const j = await r.json(); if (!j.ok) return;
     const total = Object.values(j.votes || {}).reduce((a, b) => a + b, 0) || 1;
     const bars = $("bars"); bars.innerHTML = "";
