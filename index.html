@@ -46,6 +46,11 @@
 
   /* Hero */
   .hero { display: grid; justify-items: center; text-align: center; gap: 14px; padding: 6px 0 34px; }
+  /* New York skyline, watercolor in the wedding palette, as the hero's own ground */
+  .hero { margin: 0 -20px; padding: 6px 20px min(50vw, 250px);
+    background-color: var(--cream);
+    background-image: linear-gradient(to bottom, var(--cream) 0%, rgba(250,247,242,.6) 34%, rgba(250,247,242,0) 52%, rgba(250,247,242,0) 84%, var(--cream) 100%), url("bg.jpg");
+    background-repeat: no-repeat; background-position: bottom center; background-size: 100% auto; }
   .badge { width: 196px; height: 196px; border-radius: 50%; background: #fff; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--hairline);
     box-shadow: var(--shadow-lg), inset 0 -10px 22px -14px rgba(43,39,34,.35), inset 0 6px 14px -10px rgba(255,255,255,.9); }
   .badge svg { width: 78%; height: 78%; display: block; }
@@ -227,19 +232,19 @@
 </g>
 </svg>
       </div>
-      <p class="kicker">Grab a button · wear it loud</p>
+      <p class="kicker">New York, someday soon</p>
       <h1>Show your love<br>for the couple.</h1>
-      <p class="lede">Grab a button, wear it loud. Every donation goes straight into Niklas &amp; Yamur's New York trip. Takes 30 seconds.</p>
+      <p class="lede">Grab a button and wear it tonight. There is no New York trip yet, and that is the point: this is the gift we give them together, a trip they would not plan for themselves. Chip in only if you feel like it, every bit is a surprise for them.</p>
     </section>
 
     <ol class="line" id="line">
 
       <li class="stop" id="stop1">
         <span class="bullet" aria-hidden="true"><span>1</span></span>
-        <h2>Chip in</h2>
-        <p class="hint" id="payHint">Suggested €8, £7 or $9. Any amount works.</p>
+        <h2>Chip in, if you like</h2>
+        <p class="hint" id="payHint">A button costs nothing. If you want to add to the trip, most people give around €8, £7 or $9. Any amount is lovely, none is expected.</p>
         <a class="btn pay mt" id="payBtn" href="#" target="_blank" rel="noopener">
-          <span class="pp" aria-hidden="true">P</span> Chip in with PayPal <span class="sub">card or PayPal, no account needed</span>
+          <span class="pp" aria-hidden="true">P</span> Add to the New York fund <span class="sub">PayPal or card, no account needed</span>
         </a>
         <div class="alt mt" id="alt">
           <span>German bank account? <button class="link" id="giroBtn" type="button" aria-expanded="false" aria-controls="giroBox" style="padding:0;font-size:inherit;color:var(--priory-800)">Transfer 8 € by Girocode or IBAN</button>.</span>
@@ -254,7 +259,8 @@
             <button class="btn ghost" id="copyIban" type="button">Copy IBAN</button>
           </div>
         </div>
-        <button class="btn red mt" id="doneBtn" type="button">Done, I chipped in <span class="heart" aria-hidden="true">♥</span></button>
+        <button class="btn red mt" id="doneBtn" type="button">Continue <span class="heart" aria-hidden="true">♥</span></button>
+        <p class="hint" style="margin-top:8px">Just here for the button? Continue anyway, the selfie and the vote are for everyone.</p>
       </li>
 
       <li class="stop wait" id="stop2">
@@ -272,8 +278,8 @@
 
       <li class="stop wait" id="stop3">
         <span class="bullet" aria-hidden="true"><span>3</span></span>
-        <h2>What should they blow it on?</h2>
-        <p class="hint">One vote. The couple sees the results.</p>
+        <h2>What should the trip include?</h2>
+        <p class="hint">One vote. Niklas &amp; Yamur get the results as their travel brief.</p>
         <div id="voteBox" hidden>
           <div class="chips" id="chips" role="group" aria-label="Vote"></div>
           <div class="field">
@@ -338,7 +344,7 @@
 
 <footer>
   <p class="serif">Niklas &amp; Yamur · New York, someday soon</p>
-  <p>The I ♥ NY buttons are a gift from Jonas. 100% of donations are handed to Niklas &amp; Yamur for their New York trip. Selfies are shared only with the couple and the fan wall on this page.</p>
+  <p>The I ♥ NY buttons are a gift from Jonas. Everything that comes together here goes to Niklas &amp; Yamur, for a New York trip that does not exist yet. Selfies are shared only with the couple and the fan wall on this page.</p>
 </footer>
 
 <script>
@@ -360,14 +366,15 @@ const CFG = {
 };
 
 const VOTES = [
-  { id: "stay",     ico: "🏙️", label: "A fancy place to stay" },
-  { id: "rooftop",  ico: "🍸", label: "Rooftop drinks" },
-  { id: "food",     ico: "🍕", label: "Eat everything" },
-  { id: "thrift",   ico: "🧥", label: "Vintage shopping haul" },
-  { id: "designer", ico: "👜", label: "One designer piece" },
-  { id: "museum",   ico: "🖼️", label: "Museum day" },
-  { id: "show",     ico: "🎟️", label: "Broadway or a concert" },
+  // ids are fixed on the backend, labels are what the guests see
+  { id: "thrift",   ico: "🛍️", label: "A shopping spree" },
+  { id: "food",     ico: "🍕", label: "Eat their way through the city" },
   { id: "club",     ico: "🪩", label: "A proper club night" },
+  { id: "designer", ico: "⛴️", label: "A boat ride round Manhattan" },
+  { id: "museum",   ico: "🧘", label: "A yoga session in Central Park" },
+  { id: "rooftop",  ico: "🍸", label: "Rooftop drinks at sunset" },
+  { id: "show",     ico: "🎟️", label: "Broadway or a concert" },
+  { id: "stay",     ico: "🏙️", label: "A night somewhere fancy" },
 ];
 
 /* ---------- State ---------- */
